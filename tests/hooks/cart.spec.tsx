@@ -97,6 +97,25 @@ describe('Cart Context', () => {
     expect(getByText('1')).toBeTruthy();
   });
 
+  it('should be able to increment a product already added to cart', async () => {
+    const { getByText, getByTestId } = render(
+      <CartProvider>
+        <TestComponent />
+      </CartProvider>,
+    );
+
+    act(() => {
+      fireEvent.press(getByTestId('add-to-cart'));
+    });
+
+    act(() => {
+      fireEvent.press(getByTestId('add-to-cart'));
+    });
+
+    expect(getByText('Test product')).toBeTruthy();
+    expect(getByText('2')).toBeTruthy();
+  });
+
   it('should be able to increment quantity', async () => {
     const { getByText, getByTestId } = render(
       <CartProvider>
@@ -185,5 +204,17 @@ describe('Cart Context', () => {
     });
 
     expect(mockedAsyncStorage.setItem).toHaveBeenCalledTimes(3);
+  });
+
+  it('should not be able to render component without provider', async () => {
+    console.error = jest.fn();
+
+    try {
+      render(<TestComponent />);
+    } catch (err) {
+      expect(err).toStrictEqual(
+        new Error('useCart must be used within a CartProvider'),
+      );
+    }
   });
 });
