@@ -44,31 +44,27 @@ const CartProvider: React.FC = ({ children }) => {
     async id => {
       const productIndex = products.findIndex(product => product.id === id);
 
-      if (productIndex > -1) {
-        const data = [...products];
-        data[productIndex].quantity += 1;
-        setProducts(data);
-        await AsyncStorage.setItem('cart', JSON.stringify(data));
-      }
+      const data = [...products];
+
+      data[productIndex].quantity += 1;
+
+      setProducts(data);
+      await AsyncStorage.setItem('cart', JSON.stringify(data));
     },
     [products],
   );
 
   const decrement = useCallback(
     async id => {
-      const product = products.find(item => item.id === id);
+      const productIndex = products.findIndex(item => item.id === id);
 
-      if (product) {
-        let data = products.filter(item => item.id !== id);
+      let data = [...products];
+      data[productIndex].quantity -= 1;
 
-        product.quantity -= 1;
-        if (product.quantity > 0) {
-          data = products.map(item => (item.id === id ? product : item));
-        }
+      data = data.filter(product => product.quantity > 0);
 
-        setProducts(data);
-        await AsyncStorage.setItem('cart', JSON.stringify(data));
-      }
+      setProducts(data);
+      await AsyncStorage.setItem('cart', JSON.stringify(data));
     },
     [products],
   );
