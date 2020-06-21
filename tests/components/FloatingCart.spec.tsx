@@ -16,7 +16,7 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-jest.mock('../../hooks/cart.tsx', () => ({
+jest.mock('../../src/hooks/cart.tsx', () => ({
   __esModule: true,
   useCart: jest.fn().mockReturnValue({
     addToCart: jest.fn(),
@@ -24,13 +24,13 @@ jest.mock('../../hooks/cart.tsx', () => ({
   }),
 }));
 
-jest.mock('../../utils/formatValue.ts', () => ({
+jest.mock('../../src/utils/formatValue.ts', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation(value => value),
 }));
 
-import FloatingCart from '../../components/FloatingCart';
-import { useCart } from '../../hooks/cart';
+import FloatingCart from '../../src/components/FloatingCart';
+import { useCart } from '../../src/hooks/cart';
 
 const useCartMocked = mocked(useCart);
 
