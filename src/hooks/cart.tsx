@@ -40,31 +40,16 @@ const CartProvider: React.FC = ({ children }) => {
     loadProducts();
   }, []);
 
-  const addToCart = useCallback(
-    async product => {
-      const item = products.find(({ id }) => product.id === id);
-      if (!item) {
-        const data = [...products, { ...product, quantity: 1 }];
+  const increment = useCallback(
+    async id => {
+      const productIndex = products.findIndex(product => product.id === id);
+
+      if (productIndex > -1) {
+        const data = [...products];
+        data[productIndex].quantity += 1;
         setProducts(data);
         await AsyncStorage.setItem('cart', JSON.stringify(data));
       }
-    },
-    [products],
-  );
-
-  const increment = useCallback(
-    async id => {
-      const data = products.map(product => {
-        if (product.id === id) {
-          return {
-            ...product,
-            quantity: product.quantity + 1,
-          };
-        }
-        return product;
-      });
-      setProducts(data);
-      await AsyncStorage.setItem('cart', JSON.stringify(data));
     },
     [products],
   );
@@ -86,6 +71,20 @@ const CartProvider: React.FC = ({ children }) => {
       }
     },
     [products],
+  );
+
+  const addToCart = useCallback(
+    async product => {
+      const item = products.find(({ id }) => product.id === id);
+      if (!item) {
+        const data = [...products, { ...product, quantity: 1 }];
+        setProducts(data);
+        await AsyncStorage.setItem('cart', JSON.stringify(data));
+      } else {
+        increment(product.id);
+      }
+    },
+    [products, increment],
   );
 
   const value = React.useMemo(
