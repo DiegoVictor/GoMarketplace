@@ -5,7 +5,7 @@ import React from 'react';
 import { mocked } from 'ts-jest/utils';
 import { render, fireEvent, act } from '@testing-library/react-native';
 
-jest.mock('../../hooks/cart.tsx', () => ({
+jest.mock('../../src/hooks/cart.tsx', () => ({
   __esModule: true,
   useCart: jest.fn().mockReturnValue({
     addToCart: jest.fn(),
@@ -13,13 +13,13 @@ jest.mock('../../hooks/cart.tsx', () => ({
   }),
 }));
 
-jest.mock('../../utils/formatValue.ts', () => ({
+jest.mock('../../src/utils/formatValue.ts', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation(value => value),
 }));
 
-import Cart from '../../pages/Cart';
-import { useCart } from '../../hooks/cart';
+import Cart from '../../src/pages/Cart';
+import { useCart } from '../../src/hooks/cart';
 
 const useCartMocked = mocked(useCart);
 

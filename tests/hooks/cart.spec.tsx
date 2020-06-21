@@ -25,7 +25,7 @@ jest.mock('@react-native-community/async-storage', () => ({
 }));
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { CartProvider, useCart } from '../../hooks/cart';
+import { CartProvider, useCart } from '../../src/hooks/cart';
 
 const TestComponent: React.FC = () => {
   const { products, addToCart, increment, decrement } = useCart();
