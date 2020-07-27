@@ -38,7 +38,7 @@ $ npm install
 > Was installed and configured the [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/) to keep the code clean and patterned.
 
 ## Configuring
-Configure your environment variables and remember to start the [API](#api) before to start this app.
+Configure your environment variables and remember to start the [Json Server](https://github.com/typicode/json-server) API before to start this app.
 
 ### .env
 In this file you may configure the API's url. Rename the `.env.example` in the root directory to `.env` then just update with your settings.
@@ -48,7 +48,9 @@ key|description|default
 API_URL|API's url.|`http://localhost:3333`
 
 ### API
-Start the [fake API](https://github.com/typicode/json-server):
+This application make usage of a third party library to create a fake API, you can more information about it in (JSON Server)[https://github.com/typicode/json-server] repository.
+
+To start the API run:
 ```
 $ npx json-server server.json -p 3333
 ```
