@@ -48,7 +48,7 @@ key|description|default
 API_URL|API's url.|`http://localhost:3333`
 
 ### API
-This application make usage of a third party library to create a fake API, you can more information about it in (JSON Server)[https://github.com/typicode/json-server] repository.
+This application make usage of a third party library to create a fake API, you can more information about it in [JSON Server](https://github.com/typicode/json-server) repository.
 
 To start the API run:
 ```
