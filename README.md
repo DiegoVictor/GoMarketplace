@@ -56,7 +56,7 @@ Or simply:
 ```
 $ yarn json-server server.json -p 3333
 ```
-In case of any change in the API's port or host remember to update the `.env`'s `API_URL` property too.
+In case of any change in the API's `port` or `host` remember to update the `.env`'s `API_URL` property too.
 > Also, maybe you need run reverse command to the API's port: `adb reverse tcp:3333 tcp:3333`
 
 # Usage
