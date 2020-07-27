@@ -17,9 +17,7 @@ This app allow everyone to see all products, add it to the cart, increment and d
     * [.env](#env)
     * [API](#api)
 * [Usage](#usage)
-  * [Expo](#expo)
   * [OS](#os)
-  * [Reactotron](#reactotron)
 * [Running the tests](#running-the-tests)
   * [Coverage report](#coverage-report)
 
@@ -64,9 +62,9 @@ In case of any change in the API's port or host remember to update the `.env`'s 
 # Usage
 The first build must be through USB connection, so connect your device (or just open your emulator) and run:
 ```
-$ yarn react-native run-android
+$ yarn android
 ```
-> For iOS use `run-ios` instead of `run-android`
+> For iOS use `ios` instead of `android`
 
 In the next times you can just start the Metro Bundler server:
 ```
