@@ -1,9 +1,18 @@
-/* eslint-disable import/first */
-
 import React from 'react';
-
 import { mocked } from 'ts-jest/utils';
 import { render, fireEvent, act } from '@testing-library/react-native';
+
+import Cart from '../../src/pages/Cart';
+import { useCart } from '../../src/hooks/cart';
+import factory from '../utils/factory';
+
+interface Product {
+  id: string;
+  title: string;
+  image_url: string;
+  price: number;
+  quantity: number;
+}
 
 jest.mock('../../src/hooks/cart.tsx', () => ({
   __esModule: true,
@@ -18,48 +27,39 @@ jest.mock('../../src/utils/formatValue.ts', () => ({
   default: jest.fn().mockImplementation(value => value),
 }));
 
-import Cart from '../../src/pages/Cart';
-import { useCart } from '../../src/hooks/cart';
-
 const useCartMocked = mocked(useCart);
 
-useCartMocked.mockReturnValue({
-  addToCart: jest.fn(),
-  products: [
-    {
-      id: '1234',
-      title: 'Cadeira Rivatti',
-      image_url:
-        'https://http2.mlstatic.com/cadeira-rivatti-branca-pes-madeira-confortavel-bonita-D_NQ_NP_981901-MLB20422264882_092015-F.jpg',
-      price: 400,
-      quantity: 5,
-    },
-    {
-      id: '12345',
-      title: 'Poltrona de madeira',
-      image_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRod5Tf0R0LkCjClrgAJU0tM713nyqHTP2lFbXU1o5zheYpwgfonTTde8swBNlahgij4hGeOgn7hQ&usqp=CAc',
-      price: 600,
-      quantity: 10,
-    },
-  ],
-  increment: jest.fn(),
-  decrement: jest.fn(),
-});
-
 describe('Dashboard', () => {
+  let products: Product[];
+
+  beforeAll(async () => {
+    products = await factory.attrsMany<Product>('Product', 2, [
+      {
+        price: 400,
+        quantity: 5,
+      },
+      {
+        price: 600,
+        quantity: 10,
+      },
+    ]);
+    useCartMocked.mockReturnValue({
+      addToCart: jest.fn(),
+      products,
+      increment: jest.fn(),
+      decrement: jest.fn(),
+    });
+  });
+
   it('should be able to list products on the cart', async () => {
     const { getByText } = render(<Cart />);
 
-    expect(getByText('Cadeira Rivatti')).toBeTruthy();
-    expect(getByText('400')).toBeTruthy();
-    expect(getByText('2000')).toBeTruthy();
-    expect(getByText('5x')).toBeTruthy();
-
-    expect(getByText('Poltrona de madeira')).toBeTruthy();
-    expect(getByText('600')).toBeTruthy();
-    expect(getByText('6000')).toBeTruthy();
-    expect(getByText('10x')).toBeTruthy();
+    products.forEach(product => {
+      expect(getByText(product.title)).toBeTruthy();
+      expect(getByText(`${product.price}`)).toBeTruthy();
+      expect(getByText(`${product.price * product.quantity}`)).toBeTruthy();
+      expect(getByText(`${product.quantity}x`)).toBeTruthy();
+    });
   });
 
   it('should be able to calculate the cart total', async () => {
@@ -77,15 +77,12 @@ describe('Dashboard', () => {
   it('should be able to increment product quantity on the cart', async () => {
     const increment = jest.fn();
 
+    const product = await factory.attrs<Product>('Product');
     useCartMocked.mockReturnValue({
       addToCart: jest.fn(),
       products: [
         {
-          id: '1234',
-          title: 'Cadeira Rivatti',
-          image_url:
-            'https://http2.mlstatic.com/cadeira-rivatti-branca-pes-madeira-confortavel-bonita-D_NQ_NP_981901-MLB20422264882_092015-F.jpg',
-          price: 400,
+          ...product,
           quantity: 5,
         },
       ],
@@ -96,27 +93,19 @@ describe('Dashboard', () => {
     const { getByTestId } = render(<Cart />);
 
     act(() => {
-      fireEvent.press(getByTestId('increment-1234'));
+      fireEvent.press(getByTestId(`increment-${product.id}`));
     });
 
-    expect(increment).toHaveBeenCalledWith('1234');
+    expect(increment).toHaveBeenCalledWith(`${product.id}`);
   });
 
   it('should be able to decrement product quantity on the cart', async () => {
     const decrement = jest.fn();
 
+    const product = await factory.attrs<Product>('Product');
     useCartMocked.mockReturnValue({
       addToCart: jest.fn(),
-      products: [
-        {
-          id: '1234',
-          title: 'Cadeira Rivatti',
-          image_url:
-            'https://http2.mlstatic.com/cadeira-rivatti-branca-pes-madeira-confortavel-bonita-D_NQ_NP_981901-MLB20422264882_092015-F.jpg',
-          price: 400,
-          quantity: 5,
-        },
-      ],
+      products: [product],
       increment: jest.fn(),
       decrement,
     });
@@ -124,9 +113,9 @@ describe('Dashboard', () => {
     const { getByTestId } = render(<Cart />);
 
     act(() => {
-      fireEvent.press(getByTestId('decrement-1234'));
+      fireEvent.press(getByTestId(`decrement-${product.id}`));
     });
 
-    expect(decrement).toHaveBeenCalledWith('1234');
+    expect(decrement).toHaveBeenCalledWith(`${product.id}`);
   });
 });
