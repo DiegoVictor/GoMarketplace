@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
+import formatValue from '../../utils/formatValue';
+import { useCart } from '../../hooks/cart';
 import {
   Container,
   CartPricing,
@@ -9,8 +11,6 @@ import {
   CartButtonText,
   CartTotalPrice,
 } from './styles';
-import formatValue from '../../utils/formatValue';
-import { useCart } from '../../hooks/cart';
 
 const FloatingCart: React.FC = () => {
   const { products } = useCart();

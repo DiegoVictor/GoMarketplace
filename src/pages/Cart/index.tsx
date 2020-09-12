@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-
 import { View } from 'react-native';
 
+import { useCart } from '../../hooks/cart';
+import formatValue from '../../utils/formatValue';
 import {
   Container,
   ProductContainer,
@@ -22,10 +23,6 @@ import {
   TotalProductsText,
   SubtotalValue,
 } from './styles';
-
-import { useCart } from '../../hooks/cart';
-
-import formatValue from '../../utils/formatValue';
 
 interface Product {
   id: string;
