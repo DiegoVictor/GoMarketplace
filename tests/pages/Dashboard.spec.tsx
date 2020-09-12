@@ -2,6 +2,7 @@ import React from 'react';
 import AxiosMock from 'axios-mock-adapter';
 import { mocked } from 'ts-jest/utils';
 import { render, fireEvent, act, wait } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 
 import api from '../../src/services/api';
 import Dashboard from '../../src/pages/Dashboard';
@@ -52,6 +53,19 @@ describe('Dashboard', () => {
       expect(getByText(title)).toBeTruthy();
       expect(getByTestId(`add-to-cart-${id}`)).toBeTruthy();
     });
+  });
+
+  it('should not be able to list products', async () => {
+    apiMock.onGet('products').reply(404);
+
+    const alert = jest.spyOn(Alert, 'alert');
+    render(<Dashboard />);
+
+    await wait(() => expect(alert).toHaveBeenCalled());
+
+    expect(alert).toHaveBeenCalledWith(
+      'Ops! Não foi possivel carregar os produtos agora, tente novamente mais tarde!',
+    );
   });
 
   it('should be able to add item to cart', async () => {
