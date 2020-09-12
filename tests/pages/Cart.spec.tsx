@@ -29,7 +29,7 @@ jest.mock('../../src/utils/formatValue.ts', () => ({
 
 const useCartMocked = mocked(useCart);
 
-describe('Dashboard', () => {
+describe('Cart', () => {
   let products: Product[];
 
   beforeAll(async () => {
