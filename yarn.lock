@@ -1171,7 +1171,7 @@
   resolved "https://registry.yarnpkg.com/@types/factory-girl/-/factory-girl-5.0.5.tgz#3b6a33a0a7af2bef597752601a4a9f4b8da355ad"
   integrity sha512-V6OW6xLlR3+My43xbKrwsz/fXgT0AOtzEpqIB/FanY/FxwBGgAmdc9lXeClELff8Ofg7EDlOSLtdgFOUgO9Fyg==
 
-"@types/faker@^5.1.0":
+"@types/faker@^5.5.4":
   version "5.5.4"
   resolved "https://registry.yarnpkg.com/@types/faker/-/faker-5.5.4.tgz#0dd8fb8ece85db3a35f5d5dae4531e7e4d92beef"
   integrity sha512-1XxsrH9DjjjhLdi0J4MoGXcrjAmbTn1HR4Jyxs0MQVyESo9p7+AkHIl3Nd3jsUnoNzRCB8iFX/V9PLIPo73IeA==
