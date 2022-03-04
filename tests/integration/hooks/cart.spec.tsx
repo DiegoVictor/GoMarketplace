@@ -10,8 +10,8 @@ import {
 } from '@testing-library/react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { CartProvider, useCart } from '../../src/hooks/cart';
-import factory from '../utils/factory';
+import { CartProvider, useCart } from '../../../src/hooks/cart';
+import factory from '../../utils/factory';
 
 interface Product {
   id: string;

@@ -2,9 +2,9 @@ import React from 'react';
 import { mocked } from 'ts-jest/utils';
 import { render, fireEvent, act } from '@testing-library/react-native';
 
-import Cart from '../../src/pages/Cart';
-import { useCart } from '../../src/hooks/cart';
-import factory from '../utils/factory';
+import Cart from '../../../src/pages/Cart';
+import { useCart } from '../../../src/hooks/cart';
+import factory from '../../utils/factory';
 
 interface Product {
   id: string;
@@ -14,7 +14,7 @@ interface Product {
   quantity: number;
 }
 
-jest.mock('../../src/hooks/cart.tsx', () => ({
+jest.mock('../../../src/hooks/cart.tsx', () => ({
   __esModule: true,
   useCart: jest.fn().mockReturnValue({
     addToCart: jest.fn(),
@@ -22,7 +22,7 @@ jest.mock('../../src/hooks/cart.tsx', () => ({
   }),
 }));
 
-jest.mock('../../src/utils/formatValue.ts', () => ({
+jest.mock('../../../src/utils/formatValue.ts', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation(value => value),
 }));

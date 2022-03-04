@@ -4,10 +4,10 @@ import { mocked } from 'ts-jest/utils';
 import { render, fireEvent, act, wait } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 
-import api from '../../src/services/api';
-import Dashboard from '../../src/pages/Dashboard';
-import { useCart } from '../../src/hooks/cart';
-import factory from '../utils/factory';
+import api from '../../../src/services/api';
+import Dashboard from '../../../src/pages/Dashboard';
+import { useCart } from '../../../src/hooks/cart';
+import factory from '../../utils/factory';
 
 interface Product {
   id: string;
