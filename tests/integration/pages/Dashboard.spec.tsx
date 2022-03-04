@@ -27,7 +27,7 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-jest.mock('../../src/hooks/cart.tsx', () => ({
+jest.mock('../../../src/hooks/cart.tsx', () => ({
   __esModule: true,
   useCart: jest.fn().mockReturnValue({
     addToCart: jest.fn(),
