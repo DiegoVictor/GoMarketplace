@@ -59,18 +59,18 @@ const Cart: React.FC = () => {
   return (
     <Container>
       <ProductContainer>
-        <ProductList
+        <ProductList<React.ElementType>
           data={products}
-          keyExtractor={item => item.id}
+          keyExtractor={(item: Product) => item.id}
           ListFooterComponent={<View />}
           ListFooterComponentStyle={{
             height: 80,
           }}
-          renderItem={({ item }) => (
+          renderItem={(result: { item: Product }) => (
             <Product>
-              <ProductImage source={{ uri: item.image_url }} />
+              <ProductImage source={{ uri: result.item.image_url }} />
               <ProductTitleContainer>
-                <ProductTitle>{item.title}</ProductTitle>
+                <ProductTitle>{result.item.title}</ProductTitle>
                 <ProductPriceContainer>
                   <ProductSinglePrice>
                     {formatValue(item.price)}
@@ -80,21 +80,21 @@ const Cart: React.FC = () => {
                     <ProductQuantity>{`${item.quantity}x`}</ProductQuantity>
 
                     <ProductPrice>
-                      {formatValue(item.price * item.quantity)}
+                      {formatValue(result.item.price * result.item.quantity)}
                     </ProductPrice>
                   </TotalContainer>
                 </ProductPriceContainer>
               </ProductTitleContainer>
               <ActionContainer>
                 <ActionButton
-                  testID={`increment-${item.id}`}
-                  onPress={() => handleIncrement(item.id)}
+                  testID={`increment-${result.item.id}`}
+                  onPress={() => handleIncrement(result.item.id)}
                 >
                   <FeatherIcon name="plus" color="#E83F5B" size={16} />
                 </ActionButton>
                 <ActionButton
-                  testID={`decrement-${item.id}`}
-                  onPress={() => handleDecrement(item.id)}
+                  testID={`decrement-${result.item.id}`}
+                  onPress={() => handleDecrement(result.item.id)}
                 >
                   <FeatherIcon name="minus" color="#E83F5B" size={16} />
                 </ActionButton>
