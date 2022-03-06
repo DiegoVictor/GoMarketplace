@@ -72,12 +72,14 @@ const Cart: React.FC = () => {
               <ProductTitleContainer>
                 <ProductTitle>{result.item.title}</ProductTitle>
                 <ProductPriceContainer>
-                  <ProductSinglePrice>
-                    {formatValue(item.price)}
+                  <ProductSinglePrice testID={`item-${result.item.id}-price`}>
+                    {formatValue(result.item.price)}
                   </ProductSinglePrice>
 
                   <TotalContainer>
-                    <ProductQuantity>{`${item.quantity}x`}</ProductQuantity>
+                    <ProductQuantity
+                      testID={`item-${result.item.id}-quantity`}
+                    >{`${result.item.quantity}x`}</ProductQuantity>
 
                     <ProductPrice>
                       {formatValue(result.item.price * result.item.quantity)}
