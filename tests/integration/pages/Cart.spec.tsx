@@ -1,9 +1,8 @@
 import React from 'react';
-import { mocked } from 'ts-jest/utils';
 import { render, fireEvent, act } from '@testing-library/react-native';
+import '@testing-library/jest-native/extend-expect';
 
 import Cart from '../../../src/pages/Cart';
-import { useCart } from '../../../src/hooks/cart';
 import factory from '../../utils/factory';
 
 interface Product {
@@ -14,11 +13,16 @@ interface Product {
   quantity: number;
 }
 
+let mockProducts = [];
+const mockIncrement = jest.fn();
+const mockDecrement = jest.fn();
 jest.mock('../../../src/hooks/cart.tsx', () => ({
   __esModule: true,
-  useCart: jest.fn().mockReturnValue({
+  useCart: () => ({
     addToCart: jest.fn(),
-    products: [],
+    products: mockProducts,
+    increment: mockIncrement,
+    decrement: mockDecrement,
   }),
 }));
 
@@ -27,95 +31,70 @@ jest.mock('../../../src/utils/formatValue.ts', () => ({
   default: jest.fn().mockImplementation(value => value),
 }));
 
-const useCartMocked = mocked(useCart);
-
 describe('Cart', () => {
-  let products: Product[];
-
-  beforeAll(async () => {
-    products = await factory.attrsMany<Product>('Product', 2, [
-      {
-        price: 400,
-        quantity: 5,
-      },
-      {
-        price: 600,
-        quantity: 10,
-      },
-    ]);
-    useCartMocked.mockReturnValue({
-      addToCart: jest.fn(),
-      products,
-      increment: jest.fn(),
-      decrement: jest.fn(),
-    });
-  });
-
   it('should be able to list products on the cart', async () => {
-    const { getByText } = render(<Cart />);
+    mockProducts = await factory.attrsMany<Product>('Product', 2);
+    const { getByText, getByTestId } = render(<Cart />);
 
-    products.forEach(product => {
+    mockProducts.forEach(product => {
       expect(getByText(product.title)).toBeTruthy();
-      expect(getByText(`${product.price}`)).toBeTruthy();
+      expect(getByTestId(`item-${product.id}-price`)).toHaveTextContent(
+        Intl.NumberFormat('en', {
+          style: 'decimal',
+        }).format(product.price),
+      );
       expect(getByText(`${product.price * product.quantity}`)).toBeTruthy();
-      expect(getByText(`${product.quantity}x`)).toBeTruthy();
+      expect(getByTestId(`item-${product.id}-quantity`)).toHaveTextContent(
+        `${product.quantity}x`,
+      );
     });
   });
 
   it('should be able to calculate the cart total', async () => {
+    mockProducts = await factory.attrsMany<Product>('Product', 2);
+
     const { getByText } = render(<Cart />);
 
-    expect(getByText('8000')).toBeTruthy();
+    const sum = mockProducts.reduce((total, item) => {
+      return total + item.quantity * item.price;
+    }, 0);
+    expect(getByText(sum.toString())).toBeTruthy();
   });
 
   it('should be able to calculate the cart total', async () => {
+    mockProducts = await factory.attrsMany<Product>('Product', 2);
+
     const { getByText } = render(<Cart />);
 
-    expect(getByText('15 itens')).toBeTruthy();
+    const sum = mockProducts.reduce((total, item) => {
+      return total + item.quantity;
+    }, 0);
+    expect(getByText(`${sum} itens`)).toBeTruthy();
   });
 
   it('should be able to increment product quantity on the cart', async () => {
-    const increment = jest.fn();
-
     const product = await factory.attrs<Product>('Product');
-    useCartMocked.mockReturnValue({
-      addToCart: jest.fn(),
-      products: [
-        {
-          ...product,
-          quantity: 5,
-        },
-      ],
-      increment,
-      decrement: jest.fn(),
-    });
+    mockProducts = [product];
 
     const { getByTestId } = render(<Cart />);
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId(`increment-${product.id}`));
     });
 
-    expect(increment).toHaveBeenCalledWith(`${product.id}`);
+    expect(mockIncrement).toHaveBeenCalledWith(`${product.id}`);
   });
 
   it('should be able to decrement product quantity on the cart', async () => {
-    const decrement = jest.fn();
-
     const product = await factory.attrs<Product>('Product');
-    useCartMocked.mockReturnValue({
-      addToCart: jest.fn(),
-      products: [product],
-      increment: jest.fn(),
-      decrement,
-    });
+    mockProducts = [product];
 
     const { getByTestId } = render(<Cart />);
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId(`decrement-${product.id}`));
     });
 
-    expect(decrement).toHaveBeenCalledWith(`${product.id}`);
+    expect(mockDecrement).toHaveBeenCalledWith(`${product.id}`);
   });
 });

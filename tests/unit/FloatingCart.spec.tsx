@@ -1,10 +1,7 @@
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { mocked } from 'ts-jest/utils';
 import { render, fireEvent, act } from '@testing-library/react-native';
 
 import FloatingCart from '../../src/components/FloatingCart';
-import { useCart } from '../../src/hooks/cart';
 import factory from '../utils/factory';
 
 interface Product {
@@ -15,21 +12,23 @@ interface Product {
   quantity: number;
 }
 
+const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => {
   const originalModule = jest.requireActual('@react-navigation/native');
 
   return {
     __esModule: true,
     ...originalModule,
-    useNavigation: jest.fn(),
+    useNavigation: () => ({ navigate: mockNavigate }),
   };
 });
 
+let mockProducts = [];
 jest.mock('../../src/hooks/cart.tsx', () => ({
   __esModule: true,
-  useCart: jest.fn().mockReturnValue({
+  useCart: () => ({
     addToCart: jest.fn(),
-    products: [],
+    products: mockProducts,
   }),
 }));
 
@@ -38,47 +37,36 @@ jest.mock('../../src/utils/formatValue.ts', () => ({
   default: jest.fn().mockImplementation(value => value),
 }));
 
-const useCartMocked = mocked(useCart);
-const useNavigationMocked = mocked(useNavigation);
-const navigate = jest.fn();
-
-useNavigationMocked.mockReturnValue({
-  navigate,
-} as any);
-
 describe('Dashboard', () => {
-  beforeAll(async () => {
-    const products = await factory.attrsMany<Product>('Product', 2, [
-      { quantity: 10, price: 600 },
-      { quantity: 5, price: 400 },
-    ]);
-    useCartMocked.mockReturnValue({
-      addToCart: jest.fn(),
-      products,
-      increment: jest.fn(),
-      decrement: jest.fn(),
-    });
-  });
-
   it('should be able to calculate the cart total', async () => {
+    mockProducts = await factory.attrsMany<Product>('Product', 2);
+
     const { getByText } = render(<FloatingCart />);
 
-    expect(getByText('8000')).toBeTruthy();
+    const sum = mockProducts.reduce((total, item) => {
+      return total + item.quantity * item.price;
+    }, 0);
+    expect(getByText(sum.toString())).toBeTruthy();
   });
 
   it('should be able to show the total quantity of itens in the cart', async () => {
+    mockProducts = await factory.attrsMany<Product>('Product', 2);
+
     const { getByText } = render(<FloatingCart />);
 
-    expect(getByText('15 itens')).toBeTruthy();
+    const sum = mockProducts.reduce((total, item) => {
+      return total + item.quantity;
+    }, 0);
+    expect(getByText(`${sum} itens`)).toBeTruthy();
   });
 
   it('should be able to navigate to the cart', async () => {
     const { getByTestId } = render(<FloatingCart />);
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('navigate-to-cart-button'));
     });
 
-    expect(navigate).toHaveBeenCalledWith('Cart');
+    expect(mockNavigate).toHaveBeenCalledWith('Cart');
   });
 });

@@ -1,14 +1,12 @@
 import React from 'react';
-import { mocked } from 'ts-jest/utils';
 import { View, Text, TouchableOpacity } from 'react-native';
 import {
   render,
   fireEvent,
   act,
-  wait,
   cleanup,
+  waitFor,
 } from '@testing-library/react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { CartProvider, useCart } from '../../../src/hooks/cart';
 import factory from '../../utils/factory';
@@ -20,80 +18,75 @@ interface Product {
   price: number;
 }
 
-jest.useFakeTimers();
+const mockSetItem = jest.fn();
+const mockGetItem = jest.fn(() => null);
+
 jest.mock('@react-native-community/async-storage', () => ({
   __esModule: true,
   default: {
-    setItem: jest.fn(),
+    setItem: () => mockSetItem(),
     removeItem: jest.fn(),
-    getItem: jest.fn().mockReturnValue(null),
+    getItem: () => mockGetItem(),
     clear: jest.fn(),
   },
 }));
 
-const mockedAsyncStorage = mocked(AsyncStorage);
+const Component: React.FC<{ product: Product }> = ({ product }) => {
+  const { products, addToCart, increment, decrement } = useCart();
+
+  return (
+    <>
+      <TouchableOpacity
+        testID="add-to-cart"
+        onPress={() => {
+          addToCart(product);
+        }}
+      >
+        Add to cart
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        testID="increment"
+        onPress={() => {
+          increment(product.id);
+        }}
+      >
+        Increment
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        testID="decrement"
+        onPress={() => {
+          decrement(product.id);
+        }}
+      >
+        Decrement
+      </TouchableOpacity>
+
+      {products.map(({ id, title, quantity }) => (
+        <View key={id}>
+          <Text>{title}</Text>
+          <Text>{quantity}</Text>
+        </View>
+      ))}
+    </>
+  );
+};
 
 describe('Cart Context', () => {
-  let TestComponent: React.FC;
-  let product;
-
-  beforeAll(async () => {
-    product = await factory.attrs<Product>('Product');
-    TestComponent = () => {
-      const { products, addToCart, increment, decrement } = useCart();
-
-      function handleAddToCart(): void {
-        addToCart(product);
-      }
-
-      function handleIncrement(): void {
-        increment(product.id);
-      }
-
-      function handleDecrement(): void {
-        decrement(product.id);
-      }
-
-      return (
-        <>
-          <TouchableOpacity testID="add-to-cart" onPress={handleAddToCart}>
-            Add to cart
-          </TouchableOpacity>
-
-          <TouchableOpacity testID="increment" onPress={handleIncrement}>
-            Increment
-          </TouchableOpacity>
-
-          <TouchableOpacity testID="decrement" onPress={handleDecrement}>
-            Decrement
-          </TouchableOpacity>
-
-          {products.map(({ id, title, quantity }) => (
-            <View key={id}>
-              <Text>{title}</Text>
-              <Text>{quantity}</Text>
-            </View>
-          ))}
-        </>
-      );
-    };
-  });
-
   afterEach(() => {
-    mockedAsyncStorage.setItem.mockClear();
-    mockedAsyncStorage.getItem.mockClear();
-
     cleanup();
   });
 
   it('should be able to add products to the cart', async () => {
+    const product = await factory.attrs<Product>('Product');
     const { getByText, getByTestId } = render(
       <CartProvider>
-        <TestComponent />
+        <Component product={product} />
       </CartProvider>,
     );
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('add-to-cart'));
     });
 
@@ -102,17 +95,18 @@ describe('Cart Context', () => {
   });
 
   it('should be able to increment a product already added to cart', async () => {
+    const product = await factory.attrs<Product>('Product');
     const { getByText, getByTestId } = render(
       <CartProvider>
-        <TestComponent />
+        <Component product={product} />
       </CartProvider>,
     );
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('add-to-cart'));
     });
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('add-to-cart'));
     });
 
@@ -121,17 +115,18 @@ describe('Cart Context', () => {
   });
 
   it('should be able to increment quantity', async () => {
+    const product = await factory.attrs<Product>('Product');
     const { getByText, getByTestId } = render(
       <CartProvider>
-        <TestComponent />
+        <Component product={product} />
       </CartProvider>,
     );
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('add-to-cart'));
     });
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('increment'));
     });
 
@@ -139,21 +134,22 @@ describe('Cart Context', () => {
   });
 
   it('should be able to decrement quantity', async () => {
+    const product = await factory.attrs<Product>('Product');
     const { getByText, getByTestId } = render(
       <CartProvider>
-        <TestComponent />
+        <Component product={product} />
       </CartProvider>,
     );
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('add-to-cart'));
     });
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('increment'));
     });
 
-    act(() => {
+    await act(async () => {
       fireEvent.press(getByTestId('decrement'));
     });
 
@@ -161,9 +157,12 @@ describe('Cart Context', () => {
   });
 
   it('should store products in AsyncStorage while adding, incrementing and decrementing', async () => {
+    const product = await factory.attrs<Product>('Product');
+
+    mockSetItem.mockClear();
     const { getByTestId } = render(
       <CartProvider>
-        <TestComponent />
+        <Component product={product} />
       </CartProvider>,
     );
 
@@ -179,46 +178,47 @@ describe('Cart Context', () => {
       fireEvent.press(getByTestId('decrement'));
     });
 
-    expect(mockedAsyncStorage.setItem).toHaveBeenCalledTimes(3);
+    expect(mockSetItem).toHaveBeenCalledTimes(3);
   });
 
   it('should load products from AsyncStorage', async () => {
+    const product = await factory.attrs<Product>('Product');
     const { title, id, image_url, price } = await factory.attrs<Product>(
       'Product',
     );
-    mockedAsyncStorage.getItem.mockReturnValue(
-      new Promise(resolve =>
-        resolve(
-          JSON.stringify([
-            {
-              title,
-              id,
-              image_url,
-              price,
-              quantity: 0,
-            },
-          ]),
-        ),
+    mockGetItem.mockReturnValue(
+      Promise.resolve(
+        JSON.stringify([
+          {
+            title,
+            id,
+            image_url,
+            price,
+            quantity: 0,
+          },
+        ]),
       ),
     );
 
     const { getByText } = render(
       <CartProvider>
-        <TestComponent />
+        <Component product={product} />
       </CartProvider>,
     );
 
-    await wait(() => expect(getByText(title)).toBeTruthy());
+    await waitFor(() => expect(getByText(title)).toBeTruthy());
 
     expect(getByText(title)).toBeTruthy();
   });
 
   it('should not be able to render component without provider', async () => {
+    const product = await factory.attrs<Product>('Product');
+
     // eslint-disable-next-line no-console
     console.error = jest.fn();
 
     try {
-      render(<TestComponent />);
+      render(<Component product={product} />);
     } catch (err) {
       expect(err).toStrictEqual(
         new Error('useCart must be used within a CartProvider'),
