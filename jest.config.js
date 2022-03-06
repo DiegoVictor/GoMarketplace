@@ -9,6 +9,8 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'tests/coverage',
   coverageReporters: ['text', 'lcov'],
-  testMatch: ['**/tests/**/*.spec.tsx'],
   roots: ['<rootDir>/src/', '<rootDir>/tests/', '<rootDir>/mocks/'],
+  transformIgnorePatterns: [
+    'node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?)/)',
+  ],
 };
