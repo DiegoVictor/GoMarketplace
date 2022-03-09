@@ -10,15 +10,15 @@ interface ProductItem {
 }
 
 export const Container = styled.SafeAreaView`
-  flex: 1;
   align-items: center;
+  flex: 1;
 `;
 
 export const ProductContainer = styled.View`
   border-radius: 5px;
-  margin-top: 60px;
   flex: 1;
   flex-direction: row;
+  margin-top: 60px;
 `;
 
 export const ProductList = styled(FlatList as new () => FlatList<ProductItem>)`
@@ -28,11 +28,11 @@ export const ProductList = styled(FlatList as new () => FlatList<ProductItem>)`
 
 export const Product = styled.View`
   background: #fff;
-  padding: 15px 10px;
   border-radius: 5px;
-  margin: 5px;
-  flex: 1;
+  /* flex: 1; */
   flex-direction: row;
+  margin: 5px;
+  padding: 15px 15px;
 `;
 
 export const ProductImage = styled.Image`
@@ -67,7 +67,6 @@ export const ProductSinglePrice = styled.Text`
 export const ProductPrice = styled.Text`
   font-weight: bold;
   margin-top: 5px;
-
   font-size: 16px;
   color: #e83f5b;
 `;
@@ -82,10 +81,6 @@ export const ProductQuantity = styled.Text`
 `;
 
 export const ActionContainer = styled.View`
-  align-self: flex-end;
-  align-items: center;
-  justify-content: space-between;
-
   margin-left: auto;
 `;
 
