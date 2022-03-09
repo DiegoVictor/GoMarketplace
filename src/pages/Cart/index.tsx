@@ -24,7 +24,7 @@ import {
   SubtotalValue,
 } from './styles';
 
-interface Product {
+interface Item {
   id: string;
   title: string;
   image_url: string;
@@ -61,12 +61,12 @@ const Cart: React.FC = () => {
       <ProductContainer>
         <ProductList<React.ElementType>
           data={products}
-          keyExtractor={(item: Product) => item.id}
+          keyExtractor={(item: Item) => item.id}
           ListFooterComponent={<View />}
           ListFooterComponentStyle={{
             height: 80,
           }}
-          renderItem={(result: { item: Product }) => (
+          renderItem={(result: { item: Item }) => (
             <Product>
               <ProductImage source={{ uri: result.item.image_url }} />
               <ProductTitleContainer>
