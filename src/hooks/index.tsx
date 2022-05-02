@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { CartProvider } from './cart';
 
-const AppProvider: React.FC = ({ children }) => {
+const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <CartProvider>
       <NavigationContainer>{children}</NavigationContainer>

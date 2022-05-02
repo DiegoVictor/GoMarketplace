@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  ReactNode,
 } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -24,7 +25,7 @@ interface CartContext {
 
 const CartContext = createContext<CartContext | null>(null);
 
-const CartProvider: React.FC = ({ children }) => {
+const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const CartProvider: React.FC = ({ children }) => {
   }, []);
 
   const increment = useCallback(
-    async id => {
+    async (id: string) => {
       const productIndex = products.findIndex(product => product.id === id);
 
       const data = [...products];
@@ -54,7 +55,7 @@ const CartProvider: React.FC = ({ children }) => {
   );
 
   const decrement = useCallback(
-    async id => {
+    async (id: string) => {
       const productIndex = products.findIndex(item => item.id === id);
 
       let data = [...products];
@@ -69,7 +70,7 @@ const CartProvider: React.FC = ({ children }) => {
   );
 
   const addToCart = useCallback(
-    async product => {
+    async (product: Product) => {
       const item = products.find(({ id }) => product.id === id);
       if (!item) {
         const data = [...products, { ...product, quantity: 1 }];
