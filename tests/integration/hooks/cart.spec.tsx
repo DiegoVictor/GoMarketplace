@@ -21,7 +21,7 @@ interface Product {
 const mockSetItem = jest.fn();
 const mockGetItem = jest.fn(() => null);
 
-jest.mock('@react-native-community/async-storage', () => ({
+jest.mock('@react-native-async-storage/async-storage', () => ({
   __esModule: true,
   default: {
     setItem: () => mockSetItem(),
