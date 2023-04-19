@@ -9,6 +9,7 @@
 [![coverage](https://img.shields.io/codecov/c/gh/DiegoVictor/GoMarketplace?logo=codecov&style=flat-square)](https://codecov.io/gh/DiegoVictor/GoMarketplace)
 [![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://raw.githubusercontent.com/DiegoVictor/GoMarketplace/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)<br>
+
 This app allow everyone to see all products, add it to the cart, increment and decrement the cart's items quantity and to see the cart's total price. All the resources used by this application comes from its fake [API](#api).
 
 ## Table of Contents
