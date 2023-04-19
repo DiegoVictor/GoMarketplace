@@ -10,6 +10,7 @@ module.exports = {
   coverageDirectory: 'tests/coverage',
   coverageReporters: ['text', 'lcov'],
   roots: ['<rootDir>/src/', '<rootDir>/tests/', '<rootDir>/mocks/'],
+  setupFiles: ['./src/jestSetupFile.js'],
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?)/)',
   ],
