@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import formatValue from '../../utils/formatValue';
 import { useCart } from '../../hooks/cart';
+import { StackParamList } from '../../contracts/stack-list';
 import {
   Container,
   CartPricing,
@@ -12,10 +14,9 @@ import {
   CartTotalPrice,
 } from './styles';
 
-const FloatingCart: React.FC = () => {
+export const FloatingCart: React.FC = () => {
   const { products } = useCart();
-
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();
 
   const cartTotal = useMemo(() => {
     const total = products.reduce(
@@ -46,5 +47,3 @@ const FloatingCart: React.FC = () => {
     </Container>
   );
 };
-
-export default FloatingCart;
