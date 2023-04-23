@@ -3,7 +3,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import { View } from 'react-native';
 
 import { useCart } from '../../hooks/cart';
-import formatValue from '../../utils/formatValue';
+import { formatValue } from '../../utils/formatValue';
 import {
   Container,
   ProductContainer,

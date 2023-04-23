@@ -3,15 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-import formatValue from '../../utils/formatValue';
 import { useCart } from '../../hooks/cart';
+import { formatValue } from '../../utils/formatValue';
 import { StackParamList } from '../../contracts/stack-list';
 import {
-  Container,
-  CartPricing,
   CartButton,
   CartButtonText,
+  CartPricing,
   CartTotalPrice,
+  Container,
 } from './styles';
 
 export const FloatingCart: React.FC = () => {
