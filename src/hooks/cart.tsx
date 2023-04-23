@@ -8,25 +8,13 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface Product {
-  id: string;
-  title: string;
-  image_url: string;
-  price: number;
-  quantity: number;
-}
+import { IProduct } from '../contracts/product';
 
-interface CartContext {
-  products: Product[];
-  addToCart(item: Omit<Product, 'quantity'>): void;
-  increment(id: string): void;
-  decrement(id: string): void;
-}
 
-const CartContext = createContext<CartContext | null>(null);
-
-const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<Product[]>([]);
+export const CartProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   useEffect(() => {
     async function loadProducts(): Promise<void> {
@@ -70,7 +58,7 @@ const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   );
 
   const addToCart = useCallback(
-    async (product: Product) => {
+    async (product: IProduct) => {
       const item = products.find(({ id }) => product.id === id);
       if (!item) {
         const data = [...products, { ...product, quantity: 1 }];
@@ -91,7 +79,7 @@ const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
-function useCart(): CartContext {
+export function useCart() {
   const context = useContext(CartContext);
 
   if (!context) {
