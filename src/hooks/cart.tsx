@@ -1,5 +1,4 @@
 import React, {
-  createContext,
   useState,
   useCallback,
   useContext,
@@ -9,7 +8,7 @@ import React, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { IProduct } from '../contracts/product';
-
+import { CartContext } from '../contexts/cart';
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -82,11 +81,5 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 export function useCart() {
   const context = useContext(CartContext);
 
-  if (!context) {
-    throw new Error(`useCart must be used within a CartProvider`);
-  }
-
   return context;
 }
-
-export { CartProvider, useCart };
