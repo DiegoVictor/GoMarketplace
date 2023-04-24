@@ -1,13 +1,7 @@
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
 
-interface ProductItem {
-  id: string;
-  title: string;
-  image_url: string;
-  price: number;
-  quantity: number;
-}
+import { IProduct } from '../../contracts/product';
 
 export const Container = styled.SafeAreaView`
   align-items: center;
@@ -21,7 +15,7 @@ export const ProductContainer = styled.View`
   margin-top: 60px;
 `;
 
-export const ProductList = styled(FlatList as new () => FlatList<ProductItem>)`
+export const ProductList = styled(FlatList as new () => FlatList<IProduct>)`
   flex: 1;
   padding: 0 10px;
 `;
