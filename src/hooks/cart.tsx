@@ -16,15 +16,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const [products, setProducts] = useState<IProduct[]>([]);
 
   useEffect(() => {
-    async function loadProducts(): Promise<void> {
+    (async () => {
       const cart = await AsyncStorage.getItem('cart');
 
       if (cart) {
         setProducts(JSON.parse(cart));
       }
-    }
-
-    loadProducts();
+    })();
   }, []);
 
   const increment = useCallback(
@@ -59,9 +57,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const addToCart = useCallback(
     async (product: IProduct) => {
       const item = products.find(({ id }) => product.id === id);
+
       if (!item) {
         const data = [...products, { ...product, quantity: 1 }];
         setProducts(data);
+
         await AsyncStorage.setItem('cart', JSON.stringify(data));
       } else {
         increment(product.id);
