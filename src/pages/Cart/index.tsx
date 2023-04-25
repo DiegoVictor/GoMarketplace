@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import { View } from 'react-native';
 
 import { useCart } from '../../hooks/cart';
 import { formatValue } from '../../utils/formatValue';
+import { IProduct } from '../../contracts/product';
 import { Product } from './Product';
 import {
   Container,
@@ -14,15 +14,7 @@ import {
   TotalProductsText,
 } from './styles';
 
-interface Item {
-  id: string;
-  title: string;
-  image_url: string;
-  price: number;
-  quantity: number;
-}
-
-const Cart: React.FC = () => {
+  
   const { increment, decrement, products } = useCart();
 
   const cartTotal = useMemo(() => {
@@ -43,8 +35,7 @@ const Cart: React.FC = () => {
       <ProductContainer>
         <ProductList<React.ElementType>
           data={products}
-          keyExtractor={(item: Item) => item.id}
-          ListFooterComponent={<View />}
+          keyExtractor={(item: IProduct) => item.id}
           ListFooterComponentStyle={{
             height: 80,
           }}
