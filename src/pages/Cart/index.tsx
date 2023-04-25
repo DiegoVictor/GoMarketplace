@@ -4,24 +4,14 @@ import { View } from 'react-native';
 
 import { useCart } from '../../hooks/cart';
 import { formatValue } from '../../utils/formatValue';
+import { Product } from './Product';
 import {
   Container,
   ProductContainer,
   ProductList,
-  Product,
-  ProductImage,
-  ProductTitleContainer,
-  ProductTitle,
-  ProductPriceContainer,
-  ProductSinglePrice,
-  TotalContainer,
-  ProductPrice,
-  ProductQuantity,
-  ActionContainer,
-  ActionButton,
+  SubtotalValue,
   TotalProductsContainer,
   TotalProductsText,
-  SubtotalValue,
 } from './styles';
 
 interface Item {
@@ -34,14 +24,6 @@ interface Item {
 
 const Cart: React.FC = () => {
   const { increment, decrement, products } = useCart();
-
-  function handleIncrement(id: string): void {
-    increment(id);
-  }
-
-  function handleDecrement(id: string): void {
-    decrement(id);
-  }
 
   const cartTotal = useMemo(() => {
     const total = products.reduce(
@@ -66,42 +48,14 @@ const Cart: React.FC = () => {
           ListFooterComponentStyle={{
             height: 80,
           }}
-          renderItem={(result: { item: Item }) => (
-            <Product>
-              <ProductImage source={{ uri: result.item.image_url }} />
-              <ProductTitleContainer>
-                <ProductTitle>{result.item.title}</ProductTitle>
-                <ProductPriceContainer>
-                  <ProductSinglePrice testID={`item-${result.item.id}-price`}>
-                    {formatValue(result.item.price)}
-                  </ProductSinglePrice>
-
-                  <TotalContainer>
-                    <ProductQuantity
-                      testID={`item-${result.item.id}-quantity`}
-                    >{`${result.item.quantity}x`}</ProductQuantity>
-
-                    <ProductPrice>
-                      {formatValue(result.item.price * result.item.quantity)}
-                    </ProductPrice>
-                  </TotalContainer>
-                </ProductPriceContainer>
-              </ProductTitleContainer>
-              <ActionContainer>
-                <ActionButton
-                  testID={`increment-${result.item.id}`}
-                  onPress={() => handleIncrement(result.item.id)}
-                >
-                  <FeatherIcon name="plus" color="#E83F5B" size={16} />
-                </ActionButton>
-                <ActionButton
-                  testID={`decrement-${result.item.id}`}
-                  onPress={() => handleDecrement(result.item.id)}
-                >
-                  <FeatherIcon name="minus" color="#E83F5B" size={16} />
-                </ActionButton>
-              </ActionContainer>
-            </Product>
+          renderItem={({ item }: { item: IProduct }) => (
+            <Product
+              item={item}
+              onPress={{
+                increment,
+                decrement,
+              }}
+            />
           )}
         />
       </ProductContainer>
