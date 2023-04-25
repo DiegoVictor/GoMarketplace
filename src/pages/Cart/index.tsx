@@ -14,7 +14,7 @@ import {
   TotalProductsText,
 } from './styles';
 
-  
+export const Cart: React.FC = () => {
   const { increment, decrement, products } = useCart();
 
   const cartTotal = useMemo(() => {
@@ -58,5 +58,3 @@ import {
     </Container>
   );
 };
-
-export default Cart;
