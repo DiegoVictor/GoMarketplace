@@ -1,26 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import { Alert, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 import { IProduct } from '../../contracts/product';
 import { useCart } from '../../hooks/cart';
 import api from '../../services/api';
 import { Product } from './Product';
+import { FloatingCart } from '../../components/FloatingCart';
+import { Container, ProductContainer, ProductList } from './styles';
 
-interface Product {
-  id: string;
-  title: string;
-  image_url: string;
-  price: number;
-}
-
-const Dashboard: React.FC = () => {
+export const Dashboard: React.FC = () => {
   const { addToCart } = useCart();
-
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   useEffect(() => {
-    async function loadProducts(): Promise<void> {
+    (async () => {
       try {
         const { data } = await api.get('products');
 
@@ -30,14 +23,8 @@ const Dashboard: React.FC = () => {
           'Ops! Não foi possivel carregar os produtos agora, tente novamente mais tarde!',
         );
       }
-    }
-
-    loadProducts();
+    })();
   }, []);
-
-  function handleAddToCart(item: Product): void {
-    addToCart(item);
-  }
 
   return (
     <Container>
@@ -57,5 +44,3 @@ const Dashboard: React.FC = () => {
     </Container>
   );
 };
-
-export default Dashboard;
