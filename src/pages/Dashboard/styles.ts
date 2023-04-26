@@ -23,30 +23,3 @@ export const ProductList = styled(
   flex: 1;
   padding: 0 10px;
 `;
-
-export const ProductImage = styled.Image`
-  height: 122px;
-  width: 122px;
-  align-self: center;
-`;
-
-export const ProductTitle = styled.Text`
-  font-size: 14px;
-  margin-top: 10px;
-`;
-
-export const PriceContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 10px;
-  margin-top: auto;
-`;
-
-export const ProductPrice = styled.Text`
-  font-weight: bold;
-  font-size: 16px;
-  color: #e83f5b;
-`;
-
-export const ProductButton = styled.TouchableOpacity``;

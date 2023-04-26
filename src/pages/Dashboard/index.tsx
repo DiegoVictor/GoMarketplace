@@ -2,21 +2,10 @@ import React, { useState, useEffect } from 'react';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { Alert, View } from 'react-native';
 
-import formatValue from '../../utils/formatValue';
+import { IProduct } from '../../contracts/product';
 import { useCart } from '../../hooks/cart';
 import api from '../../services/api';
-import FloatingCart from '../../components/FloatingCart';
-import {
-  Container,
-  ProductContainer,
-  ProductImage,
-  ProductList,
-  Product,
-  ProductTitle,
-  PriceContainer,
-  ProductPrice,
-  ProductButton,
-} from './styles';
+import { Product } from './Product';
 
 interface Product {
   id: string;
@@ -53,27 +42,14 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <ProductContainer>
-        <ProductList
+        <ProductList<React.ElementType>
           data={products}
-          keyExtractor={item => item.id}
-          ListFooterComponent={<View />}
+          keyExtractor={(item: IProduct) => item.id}
           ListFooterComponentStyle={{
             height: 80,
           }}
-          renderItem={({ item }) => (
-            <Product>
-              <ProductImage source={{ uri: item.image_url }} />
-              <ProductTitle>{item.title}</ProductTitle>
-              <PriceContainer>
-                <ProductPrice>{formatValue(item.price)}</ProductPrice>
-                <ProductButton
-                  testID={`add-to-cart-${item.id}`}
-                  onPress={() => handleAddToCart(item)}
-                >
-                  <FeatherIcon size={20} name="plus" color="#C4C4C4" />
-                </ProductButton>
-              </PriceContainer>
-            </Product>
+          renderItem={({ item }: { item: IProduct }) => (
+            <Product item={item} onPress={addToCart} />
           )}
         />
       </ProductContainer>
