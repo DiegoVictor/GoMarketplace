@@ -8,8 +8,8 @@ test_script:
   - cmd: npm run test
 on_success:
   - ps: >-
-    $ProgressPreference = 'SilentlyContinue'
+      $ProgressPreference = 'SilentlyContinue'
 
-    Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe
+      Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe
 
-    .\codecov.exe -s tests/coverage
+      .\codecov.exe -s tests/coverage
