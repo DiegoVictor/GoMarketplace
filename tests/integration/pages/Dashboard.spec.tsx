@@ -4,41 +4,34 @@ import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 
 import api from '../../../src/services/api';
-import Dashboard from '../../../src/pages/Dashboard';
-import factory from '../../utils/factory';
+import { Dashboard } from '../../../src/pages/Dashboard';
+import { factory } from '../../utils/factory';
+import { IProduct } from '../../../src/contracts/product';
 
-interface Product {
-  id: string;
-  title: string;
-  image_url: string;
-  price: number;
-}
-
+const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => {
-  const originalModule = jest.requireActual('@react-navigation/native');
-
   return {
-    __esModule: true,
-    ...originalModule,
-    useNavigation: jest.fn(),
+    ...jest.requireActual('@react-navigation/native'),
+    useNavigation: () => ({ navigate: mockNavigate }),
   };
 });
 
-const mockAddToCart = jest.fn();
+const mockUseCart = jest.fn();
 jest.mock('../../../src/hooks/cart.tsx', () => ({
-  __esModule: true,
-  useCart: () => ({
-    addToCart: mockAddToCart,
-    products: [],
-  }),
+  useCart: () => mockUseCart(),
 }));
 
 const apiMock = new AxiosMock(api);
 
 describe('Dashboard', () => {
   it('should be able to list products', async () => {
-    const products = await factory.attrsMany<Product>('Product', 2);
+    const products = await factory.attrsMany<IProduct>('Product', 2);
     const [product] = products;
+
+    mockUseCart.mockReturnValue({
+      products: [],
+    });
+
     apiMock.onGet('products').reply(200, products);
 
     const { getByText, getByTestId } = render(<Dashboard />);
@@ -56,6 +49,10 @@ describe('Dashboard', () => {
   it('should not be able to list products', async () => {
     apiMock.onGet('products').reply(404);
 
+    mockUseCart.mockReturnValue({
+      products: [],
+    });
+
     const alert = jest.spyOn(Alert, 'alert');
     render(<Dashboard />);
 
@@ -67,8 +64,14 @@ describe('Dashboard', () => {
   });
 
   it('should be able to add item to cart', async () => {
-    const product = await factory.attrs<Product>('Product');
+    const product = await factory.attrs<IProduct>('Product');
     apiMock.onGet('products').reply(200, [product]);
+
+    const addToCart = jest.fn();
+    mockUseCart.mockReturnValue({
+      products: [],
+      addToCart,
+    });
 
     const { getByText, getByTestId } = render(<Dashboard />);
 
@@ -80,6 +83,6 @@ describe('Dashboard', () => {
       fireEvent.press(getByTestId(`add-to-cart-${product.id}`));
     });
 
-    expect(mockAddToCart).toHaveBeenCalledWith(product);
+    expect(addToCart).toHaveBeenCalledWith(product);
   });
 });
