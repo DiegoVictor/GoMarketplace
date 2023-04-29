@@ -8,7 +8,7 @@ import React, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { IProduct } from '../contracts/product';
-import { CartContext } from '../contexts/cart';
+import { CartContext, ICartContext } from '../contexts/cart';
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -81,5 +81,5 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 export function useCart() {
   const context = useContext(CartContext);
 
-  return context;
+  return context as ICartContext;
 }
