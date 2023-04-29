@@ -211,7 +211,11 @@ describe('Cart Context', () => {
     console.error = jest.fn();
 
     try {
-      render(<Component product={product} />);
+      render(
+        <CartProvider>
+          <Component product={product} />
+        </CartProvider>,
+      );
     } catch (err) {
       expect(err).toStrictEqual(
         new Error('useCart must be used within a CartProvider'),
