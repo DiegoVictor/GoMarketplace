@@ -1,5 +1,5 @@
 # GoMarketplace
-[![Travis](https://img.shields.io/travis/com/DiegoVictor/GoMarketplace?logo=travis&style=flat-square)](https://app.travis-ci.com/github/DiegoVictor/GoMarketplace)
+[![AppVeyor](https://img.shields.io/appveyor/build/diegovictor/gomarketplace?logo=appveyor&style=flat-square)](https://ci.appveyor.com/project/DiegoVictor/gomarketplace)
 [![react-native](https://img.shields.io/badge/react--native-0.71.7-61dafb?style=flat-square&logo=react)](https://reactnative.dev/)
 [![typescript](https://img.shields.io/badge/typescript-5.0.4-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![styled-components](https://img.shields.io/badge/styled_components-5.3.9-db7b86?style=flat-square&logo=styled-components)](https://styled-components.com/)
