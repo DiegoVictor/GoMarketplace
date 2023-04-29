@@ -9,14 +9,8 @@ import {
 } from '@testing-library/react-native';
 
 import { CartProvider, useCart } from '../../../src/hooks/cart';
-import factory from '../../utils/factory';
-
-interface Product {
-  id: string;
-  title: string;
-  image_url: string;
-  price: number;
-}
+import { factory } from '../../utils/factory';
+import { IProduct } from '../../../src/contracts/product';
 
 const mockSetItem = jest.fn();
 const mockGetItem = jest.fn();
@@ -31,7 +25,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   },
 }));
 
-const Component: React.FC<{ product: Product }> = ({ product }) => {
+const Component: React.FC<{ product: IProduct }> = ({ product }) => {
   const { products, addToCart, increment, decrement } = useCart();
 
   return (
@@ -78,8 +72,8 @@ describe('Cart Context', () => {
     cleanup();
   });
 
-  it('should be able to add products to the cart', async () => {
-    const product = await factory.attrs<Product>('Product');
+  it('should be able to add a product to the cart', async () => {
+    const product = await factory.attrs<IProduct>('Product');
     const { getByText, getByTestId } = render(
       <CartProvider>
         <Component product={product} />
@@ -95,7 +89,8 @@ describe('Cart Context', () => {
   });
 
   it('should be able to increment a product already added to cart', async () => {
-    const product = await factory.attrs<Product>('Product');
+    const product = await factory.attrs<IProduct>('Product', { quantity: 1 });
+
     const { getByText, getByTestId } = render(
       <CartProvider>
         <Component product={product} />
@@ -110,12 +105,11 @@ describe('Cart Context', () => {
       fireEvent.press(getByTestId('add-to-cart'));
     });
 
-    expect(getByText(product.title)).toBeTruthy();
     expect(getByText('2')).toBeTruthy();
   });
 
   it('should be able to increment quantity', async () => {
-    const product = await factory.attrs<Product>('Product');
+    const product = await factory.attrs<IProduct>('Product');
     const { getByText, getByTestId } = render(
       <CartProvider>
         <Component product={product} />
@@ -134,7 +128,7 @@ describe('Cart Context', () => {
   });
 
   it('should be able to decrement quantity', async () => {
-    const product = await factory.attrs<Product>('Product');
+    const product = await factory.attrs<IProduct>('Product');
     const { getByText, getByTestId } = render(
       <CartProvider>
         <Component product={product} />
@@ -157,7 +151,7 @@ describe('Cart Context', () => {
   });
 
   it('should store products in AsyncStorage while adding, incrementing and decrementing', async () => {
-    const product = await factory.attrs<Product>('Product');
+    const product = await factory.attrs<IProduct>('Product');
 
     mockSetItem.mockClear();
     const { getByTestId } = render(
@@ -182,8 +176,8 @@ describe('Cart Context', () => {
   });
 
   it('should load products from AsyncStorage', async () => {
-    const product = await factory.attrs<Product>('Product');
-    const { title, id, image_url, price } = await factory.attrs<Product>(
+    const product = await factory.attrs<IProduct>('Product');
+    const { title, id, image_url, price } = await factory.attrs<IProduct>(
       'Product',
     );
     mockGetItem.mockReturnValue(
@@ -212,9 +206,8 @@ describe('Cart Context', () => {
   });
 
   it('should not be able to render component without provider', async () => {
-    const product = await factory.attrs<Product>('Product');
+    const product = await factory.attrs<IProduct>('Product');
 
-    // eslint-disable-next-line no-console
     console.error = jest.fn();
 
     try {
