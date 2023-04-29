@@ -1,0 +1,14 @@
+version: 1.0.{build}
+environment:
+  API_URL: http://localhost:3333
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+install:
+  - cmd: npm ci
+build: off
+test_script:
+  - cmd: npm run test
+on_success:
+  - ps: >-
+    $ProgressPreference = 'SilentlyContinue'
+    Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe
+    .\codecov.exe -t ${CODECOV_TOKEN} -s tests/coverage
