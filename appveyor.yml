@@ -3,6 +3,7 @@ environment:
   API_URL: http://localhost:3333
 install:
   - cmd: npm ci
+build: off
 test_script:
   - cmd: npm run test
 on_success:
