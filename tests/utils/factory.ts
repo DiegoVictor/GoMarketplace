@@ -5,11 +5,11 @@ factory.define(
   'Product',
   {},
   {
-    id: () => String(faker.datatype.number()),
+    id: () => String(faker.number.int()),
     title: faker.commerce.productName,
-    image_url: faker.image.imageUrl,
+    image_url: faker.image.url,
     price: () => Number(faker.finance.amount()),
-    quantity: () => faker.datatype.number({ min: 2, max: 10 }),
+    quantity: () => faker.number.int({ min: 2, max: 10 }),
   },
 );
 
