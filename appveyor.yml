@@ -3,9 +3,9 @@ image: Ubuntu2204
 environment:
   API_URL: http://localhost:3333
 install:
-  - cmd: npm ci
+  - sh: npm ci
 test_script:
-  - cmd: npm run test
+  - sh: npm run test
 on_success:
   - sh: |
       curl -Os https://uploader.codecov.io/latest/linux/codecov
