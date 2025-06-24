@@ -1,15 +1,14 @@
 version: 1.0.{build}
+image: Ubuntu2204
 environment:
   API_URL: http://localhost:3333
 install:
   - cmd: npm ci
-build: off
 test_script:
   - cmd: npm run test
 on_success:
-  - ps: >-
-      $ProgressPreference = 'SilentlyContinue'
+  - sh: |
+      curl -Os https://uploader.codecov.io/latest/linux/codecov
 
-      Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe
-
-      .\codecov.exe -s tests/coverage
+      chmod +x codecov
+      ./codecov
