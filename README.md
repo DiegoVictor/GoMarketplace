@@ -1,11 +1,12 @@
 # GoMarketplace
+
 [![AppVeyor](https://img.shields.io/appveyor/build/diegovictor/gomarketplace?logo=appveyor&style=flat-square)](https://ci.appveyor.com/project/DiegoVictor/gomarketplace)
-[![react-native](https://img.shields.io/badge/react--native-0.72.3-61dafb?style=flat-square&logo=react)](https://reactnative.dev/)
-[![typescript](https://img.shields.io/badge/typescript-5.1.6-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![styled-components](https://img.shields.io/badge/styled_components-6.0.3-db7b86?style=flat-square&logo=styled-components)](https://styled-components.com/)
+[![typescript](https://img.shields.io/badge/typescript-6.0.3-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![react-native](https://img.shields.io/badge/react--native-0.86.0-61dafb?style=flat-square&logo=react)](https://reactnative.dev/)
+[![styled-components](https://img.shields.io/badge/styled_components-6.4.3-db7b86?style=flat-square&logo=styled-components)](https://styled-components.com/)
 [![eslint](https://img.shields.io/badge/eslint-8.44.0-4b32c3?style=flat-square&logo=eslint)](https://eslint.org/)
-[![airbnb-style](https://flat.badgen.net/badge/style-guide/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
-[![jest](https://img.shields.io/badge/jest-29.6.1-brightgreen?style=flat-square&logo=jest)](https://jestjs.io/)
+[![jest](https://img.shields.io/badge/jest-29.7.0-brightgreen?style=flat-square&logo=jest)](https://jestjs.io/)
+[![expo](https://img.shields.io/badge/expo-57.0.2-000000?style=flat-square&logo=expo)](https://expo.dev/)
 [![coverage](https://img.shields.io/codecov/c/gh/DiegoVictor/GoMarketplace?logo=codecov&style=flat-square)](https://codecov.io/gh/DiegoVictor/GoMarketplace)
 [![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://raw.githubusercontent.com/DiegoVictor/GoMarketplace/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)<br>
