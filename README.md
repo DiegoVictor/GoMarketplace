@@ -46,9 +46,9 @@ Configure your environment variables and remember to start the [Json Server](htt
 ### .env
 In this file you may configure the API's url. Rename the `.env.example` in the root directory to `.env` then just update with your settings.
 
-key|description|default
----|---|---
-API_URL|API's url.|`http://localhost:3333`
+| key                 | description | default                 |
+| ------------------- | ----------- | ----------------------- |
+| EXPO_PUBLIC_API_URL | API's url.  | `http://localhost:3333` |
 
 ### API
 This application make usage of a third party library to create a fake API, you can more information about it in [JSON Server](https://github.com/typicode/json-server) repository.
