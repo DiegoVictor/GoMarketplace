@@ -3,10 +3,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'tests/coverage',
   coverageReporters: ['text', 'lcov'],
-  preset: '@testing-library/react-native',
-  setupFilesAfterEnv: ['./src/jestSetupFile.ts'],
-  testEnvironment: 'node',
-  transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?)/)',
-  ],
+  preset: 'jest-expo',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  transformIgnorePatterns: [],
 };
