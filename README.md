@@ -65,13 +65,13 @@ This application make usage of a third party library to create a fake API, you c
 To start the API run:
 
 ```
-$ npx json-server server.json -p 3333
+$ npx json-server api.json -p 3333
 ```
 
 Or simply:
 
 ```
-$ yarn json-server server.json -p 3333
+$ yarn json-server api.json -p 3333
 ```
 
 In case of any change in the API's `port` or `host` remember to update the `.env`'s `API_URL` property too.
