@@ -14,15 +14,16 @@
 This app allow everyone to see all products, add it to the cart, increment and decrement the cart's items quantity and to see the cart's total price. All the resources used by this application comes from its fake [API](#api).
 
 ## Table of Contents
-* [Screenshots](#screenshots)
-* [Installing](#installing)
-  * [Configuring](#configuring)
-    * [.env](#env)
-    * [API](#api)
-* [Usage](#usage)
-  * [OS](#os)
-* [Running the tests](#running-the-tests)
-  * [Coverage report](#coverage-report)
+
+- [Screenshots](#screenshots)
+- [Installing](#installing)
+  - [Configuring](#configuring)
+    - [.env](#env)
+    - [API](#api)
+- [Usage](#usage)
+  - [Expo](#expo)
+- [Running the tests](#running-the-tests)
+  - [Coverage report](#coverage-report)
 
 # Screenshots
 
