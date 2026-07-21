@@ -95,7 +95,7 @@ $ yarn android
 
 > For iOS use `ios` instead of `android`
 
-In the next time you can just start the server running:
+For the next time you can just start the server running:
 
 ```
 $ yarn start
