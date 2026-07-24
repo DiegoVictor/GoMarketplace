@@ -1,4 +1,4 @@
-import { IProduct } from '@/constants/product';
+import { IProduct } from '@/types/product';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, ReactNode, useEffect, useState } from 'react';
 
