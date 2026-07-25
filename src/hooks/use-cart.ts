@@ -1,5 +1,5 @@
-import { IProduct } from '@/constants/product';
 import { CartContext, ICartContext } from '@/contexts/CartContext';
+import { IProduct } from '@/types/product';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useContext } from 'react';
 
