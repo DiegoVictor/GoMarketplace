@@ -3,7 +3,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { ICartContext } from '@/contexts/CartContext';
 import { Context } from 'react';
 import { FloatingCart } from '../../src/components/floating-cart';
-import { IProduct } from '../../src/constants/product';
+import { IProduct } from '../../src/types/product';
 import { factory } from '../utils/factory';
 
 const mockPush = jest.fn();
@@ -18,7 +18,7 @@ jest.mock('expo-router', () => {
 });
 
 const mockFormatValue = jest.fn();
-jest.mock('../../src/constants/format-value.ts', () => {
+jest.mock('../../src/helpers/format-value.ts', () => {
   return {
     formatValue: (value: number) => mockFormatValue(value),
   };
