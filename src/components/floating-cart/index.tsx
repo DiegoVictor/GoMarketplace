@@ -1,9 +1,8 @@
+import { CartContext } from '@/contexts/CartContext';
+import { formatValue } from '@/helpers/format-value';
 import Feather from '@react-native-vector-icons/feather';
 import { router } from 'expo-router';
 import React, { useContext, useMemo } from 'react';
-
-import { formatValue } from '@/constants/format-value';
-import { CartContext } from '@/contexts/CartContext';
 import {
   CartButton,
   CartButtonText,
