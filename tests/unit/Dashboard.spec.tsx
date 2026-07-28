@@ -1,27 +1,33 @@
-import React from 'react';
-import AxiosMock from 'axios-mock-adapter';
-import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
+import Dashboard from '../../src/app/dashboard';
+import { IProduct } from '../../src/types/product';
+import { factory } from '../utils/factory';
 
-import api from '../../../src/services/api';
-import { Dashboard } from '../../../src/pages/Dashboard';
-import { factory } from '../../utils/factory';
-import { IProduct } from '../../../src/contracts/product';
-
-const mockNavigate = jest.fn();
-jest.mock('@react-navigation/native', () => {
+const mockPush = jest.fn();
+jest.mock('expo-router', () => {
+  const actualExpoRouter = jest.requireActual('expo-router');
   return {
-    ...jest.requireActual('@react-navigation/native'),
-    useNavigation: () => ({ navigate: mockNavigate }),
+    ...actualExpoRouter,
+    router: {
+      push: (route: string) => mockPush(route),
+    },
   };
 });
 
 const mockUseCart = jest.fn();
-jest.mock('../../../src/hooks/cart.tsx', () => ({
+jest.mock('../../src/hooks/use-cart', () => ({
   useCart: () => mockUseCart(),
 }));
 
-const apiMock = new AxiosMock(api);
+const mockApiGet = jest.fn();
+jest.mock('../../src/services/api', () => {
+  return {
+    api: {
+      get: () => mockApiGet(),
+    },
+  };
+});
 
 describe('Dashboard', () => {
   it('should be able to list products', async () => {
@@ -29,12 +35,12 @@ describe('Dashboard', () => {
     const [product] = products;
 
     mockUseCart.mockReturnValue({
-      products: [],
+      addToCart: jest.fn(),
     });
 
-    apiMock.onGet('products').reply(200, products);
+    mockApiGet.mockResolvedValueOnce({ data: products });
 
-    const { getByText, getByTestId } = render(<Dashboard />);
+    const { getByText, getByTestId } = await render(<Dashboard />);
 
     await waitFor(() => expect(getByText(product.title)).toBeTruthy(), {
       timeout: 200,
@@ -47,14 +53,15 @@ describe('Dashboard', () => {
   });
 
   it('should not be able to list products', async () => {
-    apiMock.onGet('products').reply(404);
+    mockApiGet.mockRejectedValueOnce(new Error('Not Found'));
 
-    mockUseCart.mockReturnValue({
+    mockUseCart.mockReturnValueOnce({
       products: [],
+      addToCart: jest.fn(),
     });
 
     const alert = jest.spyOn(Alert, 'alert');
-    render(<Dashboard />);
+    await render(<Dashboard />);
 
     await waitFor(() => expect(alert).toHaveBeenCalled());
 
@@ -65,23 +72,17 @@ describe('Dashboard', () => {
 
   it('should be able to add item to cart', async () => {
     const product = await factory.attrs<IProduct>('Product');
-    apiMock.onGet('products').reply(200, [product]);
+    mockApiGet.mockResolvedValueOnce({ data: [product] });
 
     const addToCart = jest.fn();
     mockUseCart.mockReturnValue({
-      products: [],
       addToCart,
     });
 
-    const { getByText, getByTestId } = render(<Dashboard />);
+    const { getByText, getByTestId } = await render(<Dashboard />);
 
-    await waitFor(() => expect(getByText(product.title)).toBeTruthy(), {
-      timeout: 200,
-    });
-
-    act(() => {
-      fireEvent.press(getByTestId(`add-to-cart-${product.id}`));
-    });
+    await waitFor(() => getByText(product.title));
+    await fireEvent.press(getByTestId(`add-to-cart-${product.id}`));
 
     expect(addToCart).toHaveBeenCalledWith(product);
   });
