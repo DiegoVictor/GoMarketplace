@@ -42,7 +42,7 @@ describe('Dashboard', () => {
 
     const { getByText, getByTestId } = await render(<Dashboard />);
 
-    await waitFor(() => expect(getByText(product.title)).toBeTruthy(), {
+    await waitFor(() => getByText(product.title), {
       timeout: 200,
     });
 
