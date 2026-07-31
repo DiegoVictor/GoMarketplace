@@ -10,7 +10,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "@expo/ui": "~57.0.8",
