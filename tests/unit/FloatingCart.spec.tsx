@@ -1,6 +1,5 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
-
 import { ICartContext } from '@/contexts/CartContext';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Context } from 'react';
 import { FloatingCart } from '../../src/components/floating-cart';
 import { IProduct } from '../../src/types/product';

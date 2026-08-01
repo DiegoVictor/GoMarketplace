@@ -21,67 +21,63 @@ jest.mock('react', () => {
 });
 
 describe('UseCart Hook', () => {
-  it(
-    'should be able to add a product to the cart',
-    async () => {
-      const product = await factory.attrs<IProduct>('Product', { quantity: 0 });
+  it('should be able to add a product to the cart', async () => {
+    const product = await factory.attrs<IProduct>('Product', { quantity: 0 });
 
-      const setProducts = jest.fn();
-      mockUseContext
-        .mockImplementationOnce(() => ({
-          products: [],
-          setProducts,
-        }))
-        .mockImplementationOnce(() => ({ products: [product], setProducts }));
+    const setProducts = jest.fn();
+    mockUseContext
+      .mockImplementationOnce(() => ({
+        products: [],
+        setProducts,
+      }))
+      .mockImplementationOnce(() => ({ products: [product], setProducts }));
 
-      const Cart = () => {
-        const { addToCart } = useCart();
-        const { products } = useContext(CartContext);
+    const Cart = () => {
+      const { addToCart } = useCart();
+      const { products } = useContext(CartContext);
 
-        return (
-          <>
-            {products.map(product => (
-              <View key={product.id}>
-                <TouchableOpacity
-                  testID="add-to-cart"
-                  onPress={() => {
-                    addToCart(product);
-                  }}
-                >
-                  <Text>Add to cart</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </>
-        );
-      };
-
-      const { getByTestId } = await render(
-        <CartProvider>
-          <Cart />
-        </CartProvider>,
+      return (
+        <>
+          {products.map(product => (
+            <View key={product.id}>
+              <TouchableOpacity
+                testID="add-to-cart"
+                onPress={async () => {
+                  await addToCart(product);
+                }}
+              >
+                <Text>Add to cart</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </>
       );
+    };
 
-      await fireEvent.press(getByTestId('add-to-cart'));
+    const { getByTestId } = await render(
+      <CartProvider>
+        <Cart />
+      </CartProvider>,
+    );
 
-      expect(setProducts).toHaveBeenCalledWith([
+    await fireEvent.press(getByTestId('add-to-cart'));
+
+    expect(setProducts).toHaveBeenCalledWith([
+      {
+        ...product,
+        quantity: 1,
+      },
+    ]);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'cart',
+      JSON.stringify([
         {
           ...product,
           quantity: 1,
         },
-      ]);
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        'cart',
-        JSON.stringify([
-          {
-            ...product,
-            quantity: 1,
-          },
-        ]),
-      );
-    },
-    30 * 1000,
-  );
+      ]),
+    );
+  });
 
   it('should be able to increment a product quantity using addToCart', async () => {
     const product = await factory.attrs<IProduct>('Product', { quantity: 1 });
