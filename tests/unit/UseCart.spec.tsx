@@ -100,8 +100,8 @@ describe('UseCart Hook', () => {
             <View key={product.id}>
               <TouchableOpacity
                 testID="add-to-cart"
-                onPress={() => {
-                  addToCart(product);
+                onPress={async () => {
+                  await addToCart(product);
                 }}
               >
                 <Text>Increment</Text>
@@ -161,8 +161,8 @@ describe('UseCart Hook', () => {
             <View key={product.id}>
               <TouchableOpacity
                 testID="increment-quantity"
-                onPress={() => {
-                  increment(product.id);
+                onPress={async () => {
+                  await increment(product.id);
                 }}
               >
                 <Text>Increment</Text>
@@ -222,8 +222,8 @@ describe('UseCart Hook', () => {
             <View key={product.id}>
               <TouchableOpacity
                 testID="decrement-quantity"
-                onPress={() => {
-                  decrement(product.id);
+                onPress={async () => {
+                  await decrement(product.id);
                 }}
               >
                 <Text>Decrement</Text>
