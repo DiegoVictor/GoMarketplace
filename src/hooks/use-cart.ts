@@ -37,7 +37,7 @@ export function useCart() {
 
       await AsyncStorage.setItem('cart', JSON.stringify(data));
     } else {
-      increment(product.id);
+      await increment(product.id);
     }
   };
 
