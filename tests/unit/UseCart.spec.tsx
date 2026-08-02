@@ -1,63 +1,44 @@
-import {
-  CartContext,
-  CartProvider,
-  ICartContext,
-} from '@/contexts/CartContext';
+import { CartContext, ICartContext } from '@/contexts/CartContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fireEvent, render } from '@testing-library/react-native';
-import { Context, useContext } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useCart } from '../../src/hooks/use-cart';
 import { IProduct } from '../../src/types/product';
 import { factory } from '../utils/factory';
-
-const mockUseContext = jest.fn();
-jest.mock('react', () => {
-  const actualReact = jest.requireActual('react');
-  return {
-    ...actualReact,
-    useContext: (context: Context<ICartContext>) => mockUseContext(context),
-  };
-});
 
 describe('UseCart Hook', () => {
   it('should be able to add a product to the cart', async () => {
     const product = await factory.attrs<IProduct>('Product', { quantity: 0 });
 
     const setProducts = jest.fn();
-    mockUseContext
-      .mockImplementationOnce(() => ({
-        products: [],
-        setProducts,
-      }))
-      .mockImplementationOnce(() => ({ products: [product], setProducts }));
+    const value: ICartContext = {
+      products: [],
+      setProducts,
+    };
 
     const Cart = () => {
       const { addToCart } = useCart();
-      const { products } = useContext(CartContext);
 
       return (
         <>
-          {products.map(product => (
-            <View key={product.id}>
-              <TouchableOpacity
-                testID="add-to-cart"
-                onPress={async () => {
-                  await addToCart(product);
-                }}
-              >
-                <Text>Add to cart</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          <View key={product.id}>
+            <TouchableOpacity
+              testID="add-to-cart"
+              onPress={async () => {
+                await addToCart(product);
+              }}
+            >
+              <Text>Add to cart</Text>
+            </TouchableOpacity>
+          </View>
         </>
       );
     };
 
     const { getByTestId } = await render(
-      <CartProvider>
+      <CartContext.Provider value={value}>
         <Cart />
-      </CartProvider>,
+      </CartContext.Provider>,
     );
 
     await fireEvent.press(getByTestId('add-to-cart'));
@@ -83,39 +64,34 @@ describe('UseCart Hook', () => {
     const product = await factory.attrs<IProduct>('Product', { quantity: 1 });
 
     const setProducts = jest.fn();
-    mockUseContext
-      .mockImplementationOnce(() => ({
-        products: [product],
-        setProducts,
-      }))
-      .mockImplementationOnce(() => ({ products: [product], setProducts }));
+    const value: ICartContext = {
+      products: [product],
+      setProducts,
+    };
 
     const Cart = () => {
       const { addToCart } = useCart();
-      const { products } = useContext(CartContext);
 
       return (
         <>
-          {products.map(product => (
-            <View key={product.id}>
-              <TouchableOpacity
-                testID="add-to-cart"
-                onPress={async () => {
-                  await addToCart(product);
-                }}
-              >
-                <Text>Increment</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          <View key={product.id}>
+            <TouchableOpacity
+              testID="add-to-cart"
+              onPress={async () => {
+                await addToCart(product);
+              }}
+            >
+              <Text>Increment</Text>
+            </TouchableOpacity>
+          </View>
         </>
       );
     };
 
     const { getByTestId } = await render(
-      <CartProvider>
+      <CartContext.Provider value={value}>
         <Cart />
-      </CartProvider>,
+      </CartContext.Provider>,
     );
 
     const quantity = product.quantity;
@@ -144,39 +120,34 @@ describe('UseCart Hook', () => {
     const product = await factory.attrs<IProduct>('Product', { quantity: 1 });
 
     const setProducts = jest.fn();
-    mockUseContext
-      .mockImplementationOnce(() => ({
-        products: [product],
-        setProducts,
-      }))
-      .mockImplementationOnce(() => ({ products: [product], setProducts }));
+    const value: ICartContext = {
+      products: [product],
+      setProducts,
+    };
 
     const Cart = () => {
       const { increment } = useCart();
-      const { products } = useContext(CartContext);
 
       return (
         <>
-          {products.map(product => (
-            <View key={product.id}>
-              <TouchableOpacity
-                testID="increment-quantity"
-                onPress={async () => {
-                  await increment(product.id);
-                }}
-              >
-                <Text>Increment</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          <View key={product.id}>
+            <TouchableOpacity
+              testID="increment-quantity"
+              onPress={async () => {
+                await increment(product.id);
+              }}
+            >
+              <Text>Increment</Text>
+            </TouchableOpacity>
+          </View>
         </>
       );
     };
 
     const { getByTestId } = await render(
-      <CartProvider>
+      <CartContext.Provider value={value}>
         <Cart />
-      </CartProvider>,
+      </CartContext.Provider>,
     );
 
     const quantity = product.quantity;
@@ -205,39 +176,34 @@ describe('UseCart Hook', () => {
     const product = await factory.attrs<IProduct>('Product', { quantity: 2 });
 
     const setProducts = jest.fn();
-    mockUseContext
-      .mockImplementationOnce(() => ({
-        products: [product],
-        setProducts,
-      }))
-      .mockImplementationOnce(() => ({ products: [product], setProducts }));
+    const value: ICartContext = {
+      products: [product],
+      setProducts,
+    };
 
     const Cart = () => {
       const { decrement } = useCart();
-      const { products } = useContext(CartContext);
 
       return (
         <>
-          {products.map(product => (
-            <View key={product.id}>
-              <TouchableOpacity
-                testID="decrement-quantity"
-                onPress={async () => {
-                  await decrement(product.id);
-                }}
-              >
-                <Text>Decrement</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          <View key={product.id}>
+            <TouchableOpacity
+              testID="decrement-quantity"
+              onPress={async () => {
+                await decrement(product.id);
+              }}
+            >
+              <Text>Decrement</Text>
+            </TouchableOpacity>
+          </View>
         </>
       );
     };
 
     const { getByTestId } = await render(
-      <CartProvider>
+      <CartContext.Provider value={value}>
         <Cart />
-      </CartProvider>,
+      </CartContext.Provider>,
     );
 
     const quantity = product.quantity;
