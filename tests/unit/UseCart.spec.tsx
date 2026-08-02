@@ -8,14 +8,19 @@ import { factory } from '../utils/factory';
 
 describe('UseCart Hook', () => {
   it('should be able to add a product to the cart', async () => {
+    console.time('factory.attrs');
     const product = await factory.attrs<IProduct>('Product', { quantity: 0 });
+    console.timeEnd('factory.attrs');
 
+    console.time('value');
     const setProducts = jest.fn();
     const value: ICartContext = {
       products: [],
       setProducts,
     };
+    console.timeEnd('value');
 
+    console.time('Cart');
     const Cart = () => {
       const { addToCart } = useCart();
 
@@ -34,15 +39,21 @@ describe('UseCart Hook', () => {
         </>
       );
     };
+    console.timeEnd('Cart');
 
+    console.time('render');
     const { getByTestId } = await render(
       <CartContext.Provider value={value}>
         <Cart />
       </CartContext.Provider>,
     );
+    console.timeEnd('render');
 
+    console.time('fireEvent.press');
     await fireEvent.press(getByTestId('add-to-cart'));
+    console.timeEnd('fireEvent.press');
 
+    console.time('expect');
     expect(setProducts).toHaveBeenCalledWith([
       {
         ...product,
@@ -58,6 +69,7 @@ describe('UseCart Hook', () => {
         },
       ]),
     );
+    console.timeEnd('expect');
   });
 
   it('should be able to increment a product quantity using addToCart', async () => {
