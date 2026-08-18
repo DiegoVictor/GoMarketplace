@@ -78,4 +78,32 @@ describe('CartContext', () => {
     expect(AsyncStorage.getItem).toHaveBeenCalledWith('cart');
     expect(getByText('Cart is empty')).toBeTruthy();
   });
+
+  it('should present empty products when AsyncStorage is empty on mount', async () => {
+    AsyncStorage.removeItem('cart');
+
+    const MyComponent = () => {
+      const { products } = useContext(CartContext);
+      return (
+        <>
+          {products.length > 0 ? (
+            products.map(product => (
+              <Text key={product.id}>{product.title}</Text>
+            ))
+          ) : (
+            <Text>Cart is empty</Text>
+          )}
+        </>
+      );
+    };
+
+    const { getByText } = await render(
+      <CartProvider>
+        <MyComponent />
+      </CartProvider>,
+    );
+
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith('cart');
+    expect(getByText('Cart is empty')).toBeTruthy();
+  });
 });
